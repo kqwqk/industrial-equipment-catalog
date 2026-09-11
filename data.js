@@ -26,5 +26,5 @@ const EQUIPMENT = [
   { id:'alkali', name:'碱洗塔', sources:['flow'], photo:'assets/photos/alkali-scrubber.jpg', photoKind:'real', render:'assets/renders/alkali-scrubber.png' },
   { id:'wet-esp', name:'湿电除尘', sources:['flow'], photo:'assets/photos/wet-esp.jpg', photoKind:'real', render:'assets/renders/wet-esp.png' },
   { id:'carbon-adsorber', name:'活性炭吸附（水蒸气脱附）', sources:['pack','flow'], photo:'assets/photos/ref-carbon.jpg', photoKind:'ref', render:'assets/renders/carbon-adsorber.png' },
-  { id:'dehydration', name:'脱水洗涤塔', sources:['flow'], photo:'assets/photos/alkali-scrubber.jpg', photoKind:'real', render:'assets/renders/dehydration-scrubber.png' }
+  { id:'dehydration', name:'脱水洗涤塔', sources:['flow'], photo:'assets/photos/scrubbing-tower.jpg', photoKind:'real', render:'assets/renders/dehydration-scrubber.png' }
 ];
