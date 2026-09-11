@@ -20,7 +20,7 @@ const EQUIPMENT = [
   { id:'biofilter', name:'生物滤池', sources:['flow'], photo:'assets/photos/biofilter.jpg', photoKind:'real', render:'assets/renders/biofilter.png' },
   { id:'induced-draft', name:'引风机', sources:['flow'], photo:'assets/photos/centrifugal-fan.jpg', photoKind:'real', render:'assets/renders/induced-draft-fan.png' },
   { id:'booster-fan', name:'增压风机', sources:['flow'], photo:'assets/photos/centrifugal-fan.jpg', photoKind:'real', render:'assets/renders/booster-fan.png' },
-  { id:'squ', name:'SQU（双筒回油过滤器）', sources:['flow'], photo:'assets/photos/squ-duplex-filter.jpg', photoKind:'real', render:'assets/renders/squ-unit.png' },
+  { id:'squ', name:'SQU（双筒回油过滤器）', sources:['flow'], photo:'assets/photos/squ-duplex-filter.jpg', photoKind:'ref', render:'assets/renders/squ-unit.png' },
   { id:'incinerator', name:'焚烧炉', sources:['flow'], photo:'assets/photos/incinerator.jpg', photoKind:'real', render:'assets/renders/incinerator.png' },
   { id:'absorption', name:'吸收塔', sources:['flow'], photo:'assets/photos/scrubbing-tower.jpg', photoKind:'real', render:'assets/renders/absorption-tower.png' },
   { id:'alkali', name:'碱洗塔', sources:['flow'], photo:'assets/photos/alkali-scrubber.jpg', photoKind:'real', render:'assets/renders/alkali-scrubber.png' },
