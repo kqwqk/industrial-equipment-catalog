@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>工业设备对照清单</title>
+  <style>
+    :root {
+      --bg: #0b0d10;
+      --panel: #14181e;
+      --line: #2a313c;
+      --text: #e8eef6;
+      --muted: #8b97a8;
+      --accent: #3b82f6;
+      --chip: #1c2430;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+      background: rgba(11,13,16,.85);
+      border-bottom: 1px solid var(--line);
+      padding: 16px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 20px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    h1 { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: .02em; }
+    .meta { color: var(--muted); font-size: 13px; }
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filters button {
+      border: 1px solid var(--line);
+      background: var(--chip);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .filters button.active {
+      color: #fff;
+      border-color: var(--accent);
+      background: rgba(59,130,246,.2);
+    }
+    main { padding: 20px 24px 48px; max-width: 1280px; margin: 0 auto; }
+    .legend {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .legend span { text-align: center; }
+    .card {
+      display: grid;
+      grid-template-columns: 180px 1fr 1fr;
+      gap: 16px;
+      align-items: stretch;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 860px) {
+      .card { grid-template-columns: 1fr; }
+      .legend { display: none; }
+    }
+    .name-col { display: flex; flex-direction: column; gap: 10px; justify-content: center; }
+    .name { font-size: 18px; font-weight: 600; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      font-size: 11px;
+      color: var(--muted);
+      background: var(--chip);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 2px 8px;
+    }
+    .tag.ok { color: #86efac; border-color: #166534; }
+    .tag.miss { color: #fca5a5; border-color: #7f1d1d; }
+    .media {
+      background: #07090c;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .media img {
+      width: 100%;
+      height: 220px;
+      object-fit: contain;
+      display: block;
+    }
+    .media .ph {
+      color: var(--muted);
+      font-size: 13px;
+      padding: 16px;
+      text-align: center;
+    }
+    .media .label {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      font-size: 11px;
+      color: var(--muted);
+      background: rgba(0,0,0,.55);
+      border-radius: 6px;
+      padding: 2px 8px;
+    }
+    footer {
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+      padding: 8px 24px 32px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>工业设备对照清单</h1>
+      <div class="meta" id="count">加载中…</div>
+    </div>
+    <div class="filters" id="filters">
+      <button class="active" data-f="all">全部</button>
+      <button data-f="ready">已齐图</button>
+      <button data-f="render">有渲染</button>
+      <button data-f="flow">流程图</button>
+      <button data-f="pack">渲染包</button>
+    </div>
+  </header>
+  <main>
+    <div class="legend">
+      <span>设备名称</span>
+      <span>真实照片</span>
+      <span>渲染图</span>
+    </div>
+    <div id="list"></div>
+  </main>
+  <footer>「真实照片」来自公开网络；「实景参考」为补图（外站限流时生成）。渲染图对齐黑底产品棚拍风格。气路管件未列入主清单。</footer>
+  <script src="./data.js"></script>
+  <script>
+    const listEl = document.getElementById('list');
+    const countEl = document.getElementById('count');
+    let filter = 'all';
+
+    function hasPhoto(item) {
+      return !!item.photo;
+    }
+    function hasRender(item) {
+      return !!item.render;
+    }
+    function ready(item) {
+      return hasPhoto(item) && hasRender(item);
+    }
+
+    function render() {
+      const items = EQUIPMENT.filter(item => {
+        if (filter === 'all') return true;
+        if (filter === 'ready') return ready(item);
+        if (filter === 'render') return hasRender(item);
+        if (filter === 'flow') return item.sources.includes('flow');
+        if (filter === 'pack') return item.sources.includes('pack');
+        return true;
+      });
+      countEl.textContent = `共 ${EQUIPMENT.length} 台 · 当前显示 ${items.length} · 已齐图 ${EQUIPMENT.filter(ready).length}`;
+      listEl.innerHTML = items.map(item => {
+        const photoLabel = item.photoKind === 'real' ? '真实照片' : (item.photoKind === 'ref' ? '实景参考' : '照片');
+        const photo = hasPhoto(item)
+          ? `<img src="${item.photo}" alt="${item.name} ${photoLabel}" loading="lazy" />`
+          : `<div class="ph">真实照片待补</div>`;
+        const renderImg = hasRender(item)
+          ? `<img src="${item.render}" alt="${item.name} 渲染图" loading="lazy" />`
+          : `<div class="ph">渲染图待补</div>`;
+        const tags = [
+          ...item.sources.map(s => s === 'pack' ? '渲染包' : '流程图'),
+          ready(item) ? (item.photoKind==='real'?'齐':'齐·参考图') : (hasRender(item) ? '缺真图' : '缺渲染')
+        ].map(t => {
+          const cls = t === '齐' ? 'ok' : (t.startsWith('缺') ? 'miss' : '');
+          return `<span class="tag ${cls}">${t}</span>`;
+        }).join('');
+        return `<article class="card" data-id="${item.id}">
+          <div class="name-col">
+            <div class="name">${item.name}</div>
+            <div class="tags">${tags}</div>
+          </div>
+          <div class="media"><span class="label">${photoLabel}</span>${photo}</div>
+          <div class="media"><span class="label">渲染图</span>${renderImg}</div>
+        </article>`;
+      }).join('');
+    }
+
+    document.getElementById('filters').addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      filter = btn.dataset.f;
+      [...e.currentTarget.children].forEach(b => b.classList.toggle('active', b === btn));
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
