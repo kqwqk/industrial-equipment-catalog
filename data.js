@@ -4,7 +4,7 @@ const EQUIPMENT = [
   { id:'pre-absorption', name:'预吸收塔', sources:['flow'], photo:'assets/photos/scrubbing-tower.jpg', photoKind:'real', render:'assets/renders/pre-absorption-tower.png' },
   { id:'exhaust', name:'废气排口', sources:['flow'], photo:'assets/photos/exhaust-stack.jpg', photoKind:'real', render:'assets/renders/exhaust-stack.png' },
   { id:'circulation-pump', name:'循环泵', sources:['flow'], photo:'assets/photos/circulation-pump.jpg', photoKind:'real', render:'assets/renders/circulation-pump.png' },
-  { id:'condenser', name:'冷凝管', sources:['pack','flow'], photo:'assets/photos/condenser-coil.jpg', photoKind:'real', render:'assets/renders/condenser.png' },
+  { id:'condenser', name:'冷凝器', sources:['pack','flow'], photo:'assets/photos/condenser-coil.jpg', photoKind:'real', render:'assets/renders/condenser.png' },
   { id:'water-scrubber', name:'水洗塔', sources:['flow'], photo:'assets/photos/scrubbing-tower.jpg', photoKind:'real', render:'assets/renders/water-scrubber.png' },
   { id:'acid-scrubber', name:'酸洗塔', sources:['flow'], photo:'assets/photos/scrubbing-tower.jpg', photoKind:'real', render:'assets/renders/acid-scrubber.png' },
   { id:'crystallizer', name:'结晶釜', sources:['flow'], photo:'assets/photos/crystallizer.jpg', photoKind:'ref', render:'assets/renders/crystallizer.png' },
